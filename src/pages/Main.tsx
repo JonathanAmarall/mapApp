@@ -1,10 +1,19 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 import {
   requestPermissionsAsync,
   getCurrentPositionAsync,
 } from 'expo-location';
+import { MaterialIcons } from '@expo/vector-icons';
 
 function Main({ navigation }) {
   const [currentRegion, setCurrentRegion] = useState();
@@ -37,32 +46,58 @@ function Main({ navigation }) {
   }
 
   return (
-    <MapView initialRegion={currentRegion} style={styles.map}>
-      <Marker coordinate={{ latitude: -27.358031, longitude: -53.40531 }}>
-        <Image
-          style={styles.avatar}
-          source={{
-            uri:
-              'https://lh3.googleusercontent.com/ogw/ADGmqu-3pE01iA2kCqB5XAgBwd-RJVPuSrEdM11uetZ3=s83-c-mo',
-          }}
+    <>
+      <MapView initialRegion={currentRegion} style={styles.map}>
+        <Marker coordinate={{ latitude: -27.358031, longitude: -53.40531 }}>
+          <Image
+            style={styles.avatar}
+            source={{
+              uri:
+                'https://lh3.googleusercontent.com/ogw/ADGmqu-3pE01iA2kCqB5XAgBwd-RJVPuSrEdM11uetZ3=s83-c-mo',
+            }}
+          />
+          <Callout
+            onPress={() => {
+              navigation.navigate('Profile', {
+                github_username: 'JonathanAmarall',
+              });
+            }}
+          >
+            <View style={styles.callout}>
+              <Text style={styles.devName}>Jonathan Amaral</Text>
+              <Text style={styles.devBio}>
+                {' '}
+                Web Developer na empresa iBRSoft
+              </Text>
+              <Text style={styles.devTechs}>
+                ReactJS, C#, Angular, VueJS, Angular
+              </Text>
+            </View>
+          </Callout>
+        </Marker>
+      </MapView>
+
+      <View style={styles.searchForm}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Buscar prestadores por categoria"
+          placeholderTextColor="#999"
+          autoCapitalize="words"
+          autoCorrect={false}
         />
-        <Callout
+
+        <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Profile', {
-              github_username: 'JonathanAmarll',
-            });
+            console.log('pesquisar');
           }}
+          style={styles.loadButton}
         >
-          <View style={styles.callout}>
-            <Text style={styles.devName}>Jonathan Amaral</Text>
-            <Text style={styles.devBio}> Web Developer na empresa iBRSoft</Text>
-            <Text style={styles.devTechs}>
-              ReactJS, C#, Angular, VueJS, Angular
-            </Text>
-          </View>
-        </Callout>
-      </Marker>
-    </MapView>
+          <Text>
+            <MaterialIcons name="my-location" size={20} color="#fff" />
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 }
 
@@ -90,6 +125,39 @@ const styles = StyleSheet.create({
   },
   devTechs: {
     marginTop: 5,
+  },
+  searchForm: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+    zIndex: 5,
+    flexDirection: 'row',
+  },
+  searchInput: {
+    flex: 1,
+    height: 50,
+    backgroundColor: '#fff',
+    color: '#333',
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 4,
+      height: 4,
+    },
+    elevation: 2,
+  },
+  loadButton: {
+    width: 50,
+    height: 50,
+    backgroundColor: 'orange',
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 15,
   },
 });
 
