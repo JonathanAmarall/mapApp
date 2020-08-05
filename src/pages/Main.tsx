@@ -15,7 +15,10 @@ import {
 } from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
 
+import api from '../services/Api';
+
 function Main({ navigation }) {
+  const [devs, setDevs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState();
 
   useEffect(() => {
@@ -40,6 +43,21 @@ function Main({ navigation }) {
 
     loadInitialPosition();
   }, []);
+
+  async function loadDevs() {
+    const { latitude, longitude } = currentRegion;
+
+    const category: string = '';
+    const res = await api.get('', {
+      params: {
+        latitude,
+        longitude,
+        category,
+      },
+    });
+
+    setDevs(res.data);
+  }
 
   if (!currentRegion) {
     return null;
